@@ -1,13 +1,17 @@
+
 name: Selenium Tests and Docker Hub Publish
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   selenium-test:
+    name: Run Selenium Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +32,9 @@ jobs:
         run: mvn clean test
 
   docker-publish:
+    name: Build and Push Docker Image
     needs: selenium-test
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -51,4 +56,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: Sanjana771/selenium-testng-automation:latest
+          tags: sanjana771/selenium-testng-automation:latest
